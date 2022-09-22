@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense } from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
+import './App.css'
 
-function App() {
+const Home = React.lazy(() => import('./component/Home'));
+const About = React.lazy(() => import('./component/About'));
+const Contact = React.lazy(() => import('./component/Contact'));
+const Project = React.lazy(() => import('./component/Project'));
+const ProjectDetail = React.lazy(() => import('./component/ProjectDetail'));
+
+const route = ['home', 'about', 'contact', 'project']
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <div className='mainContainer'>
+        {route.map((route) => {
+          return (
+            <Link key={route} to={`/${route}`}>
+              {route}
+            </Link>
+          )
+        })}
+      </div>
+      <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        <Route path={'/home'} element={<Home />} />
+        <Route path={'/about'} element={<About />} />
+        <Route path={'/project'} element={<Project />} />
+        <Route path={'/contact'} element={<Contact />} />
+        <Route path={'/project/:projectId'} element={<ProjectDetail />} />
+      </Routes>
+      </Suspense>
+
+    </>
+
+  )
 }
 
-export default App;
+export default App
